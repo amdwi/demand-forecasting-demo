@@ -117,9 +117,18 @@ fig.update_layout(
 st.plotly_chart(fig, use_container_width=True)
 
 # ── Metrics ───────────────────────────────────────────────────
+# Move preds_test OUTSIDE the if block so it's always available
+preds_test = forecast[forecast["ds"].isin(test_df["ds"])]
+
 if show_metrics:
     st.subheader("📊 Model Accuracy (on held-out test set)")
-    preds_test = forecast[forecast["ds"].isin(test_df["ds"])]
+    mae = mean_absolute_error(test_df["y"].values, preds_test["yhat"].values)
+    mape = mean_absolute_percentage_error(test_df["y"].values, preds_test["yhat"].values) * 100
+    rmse = np.sqrt(np.mean((test_df["y"].values - preds_test["yhat"].values) ** 2))
+    col1, col2, col3 = st.columns(3)
+    col1.metric("MAE", f"{mae:.1f} units")
+    col2.metric("MAPE", f"{mape:.1f}%")
+    col3.metric("RMSE", f"{rmse:.1f} units")
     mae = mean_absolute_error(test_df["y"].values, preds_test["yhat"].values)
     mape = mean_absolute_percentage_error(test_df["y"].values, preds_test["yhat"].values) * 100
     rmse = np.sqrt(np.mean((test_df["y"].values - preds_test["yhat"].values) ** 2))
