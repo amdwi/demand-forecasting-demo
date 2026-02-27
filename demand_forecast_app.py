@@ -79,7 +79,7 @@ fig.add_trace(go.Scatter(
 fig.add_trace(go.Scatter(
     x=pd.concat([forecast["ds"], forecast["ds"][::-1]]),
     y=pd.concat([forecast["yhat_upper"], forecast["yhat_lower"][::-1]]),
-    fill="toself", fillcolor="rgba(232,112,64,0.15)",
+    fill="toself", fillcolor="rgba(0,196,140,0.20)",
     line=dict(color="rgba(255,255,255,0)"),
     name="Confidence Interval"
 ))
@@ -157,7 +157,7 @@ fig_eval.add_trace(go.Scatter(
     x=pd.concat([preds_test["ds"], preds_test["ds"][::-1]]),
     y=pd.concat([preds_test["yhat_upper"], preds_test["yhat_lower"][::-1]]),
     fill="toself",
-    fillcolor="rgba(232,112,64,0.15)",
+    fillcolor="rgba(0,196,140,0.20)",
     line=dict(color="rgba(255,255,255,0)"),
     name="Confidence Interval"
 ))
