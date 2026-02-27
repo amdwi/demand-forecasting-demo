@@ -79,7 +79,7 @@ fig.add_trace(go.Scatter(
     line=dict(color="rgba(255,255,255,0)"),
     name="Confidence Interval"
 ))
-forecast_start = df["ds"].max()
+forecast_start = df["ds"].max().strftime("%Y-%m-%d")
 fig.add_vline(x=forecast_start, line_dash="dot", line_color="gray",
               annotation_text="Forecast Start", annotation_position="top right")
 fig.update_layout(
