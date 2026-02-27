@@ -127,20 +127,5 @@ with st.expander("🗂️ View Raw Data"):
 st.caption("Demo built with Prophet · Plotly · Streamlit — open source & free")
 ```
 
-4. Scroll down, click **Commit new file** ✅
 
----
-
-### Step 5 — Create the Requirements File
-1. Click **Add file** → **Create new file**
-2. Name it exactly: `requirements.txt`
-3. Paste this:
-```
-streamlit
-prophet
-plotly
-scikit-learn
-pandas
-numpy
-```
 
