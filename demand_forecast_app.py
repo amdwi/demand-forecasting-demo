@@ -62,16 +62,20 @@ with st.spinner("Training forecast model..."):
 st.subheader(f"📈 Forecast for {product} — Next {horizon} Weeks")
 
 fig = go.Figure()
+
 fig.add_trace(go.Scatter(
     x=df["ds"], y=df["y"],
     mode="lines+markers", name="Actual Sales",
-    line=dict(color="#4A90D9", width=2), marker=dict(size=4)
+    line=dict(color="#4A90D9", width=2),
+    marker=dict(size=4)
 ))
+
 fig.add_trace(go.Scatter(
     x=forecast["ds"], y=forecast["yhat"],
     mode="lines", name="Forecast",
     line=dict(color="#E87040", width=2, dash="dash")
 ))
+
 fig.add_trace(go.Scatter(
     x=pd.concat([forecast["ds"], forecast["ds"][::-1]]),
     y=pd.concat([forecast["yhat_upper"], forecast["yhat_lower"][::-1]]),
@@ -79,9 +83,29 @@ fig.add_trace(go.Scatter(
     line=dict(color="rgba(255,255,255,0)"),
     name="Confidence Interval"
 ))
+
+# ── Vertical line using add_shape (compatible with all Plotly versions) ──
 forecast_start = df["ds"].max().strftime("%Y-%m-%d")
-fig.add_vline(x=forecast_start, line_dash="dot", line_color="gray",
-              annotation_text="Forecast Start", annotation_position="top right")
+
+fig.add_shape(
+    type="line",
+    x0=forecast_start,
+    x1=forecast_start,
+    y0=0, y1=1,
+    xref="x", yref="paper",
+    line=dict(color="gray", dash="dot", width=1.5)
+)
+
+fig.add_annotation(
+    x=forecast_start,
+    y=0.95,
+    xref="x", yref="paper",
+    text="Forecast Start",
+    showarrow=False,
+    font=dict(color="gray", size=12),
+    bgcolor="rgba(0,0,0,0)"
+)
+
 fig.update_layout(
     xaxis_title="Date", yaxis_title="Units Sold",
     legend=dict(orientation="h", yanchor="bottom", y=1.02),
@@ -89,6 +113,7 @@ fig.update_layout(
     plot_bgcolor="#0e1117", paper_bgcolor="#0e1117",
     font=dict(color="white")
 )
+
 st.plotly_chart(fig, use_container_width=True)
 
 # ── Metrics ───────────────────────────────────────────────────
@@ -125,5 +150,3 @@ with st.expander("🗂️ View Raw Data"):
     st.dataframe(df.rename(columns={"ds": "Date", "y": "Units Sold"}), use_container_width=True)
 
 st.caption("Demo built with Prophet · Plotly · Streamlit — open source & free")
-
-
