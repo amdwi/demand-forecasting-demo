@@ -128,6 +128,63 @@ if show_metrics:
     col2.metric("MAPE", f"{mape:.1f}%")
     col3.metric("RMSE", f"{rmse:.1f} units")
 
+st.subheader("🔍 Actual vs Predicted — Last 12 Weeks")
+
+fig_eval = go.Figure()
+
+# Actual real values
+fig_eval.add_trace(go.Scatter(
+    x=test_df["ds"],
+    y=test_df["y"],
+    mode="lines+markers",
+    name="Actual (Real)",
+    line=dict(color="#4A90D9", width=2),
+    marker=dict(size=6)
+))
+
+# What model predicted
+fig_eval.add_trace(go.Scatter(
+    x=preds_test["ds"],
+    y=preds_test["yhat"],
+    mode="lines+markers",
+    name="Predicted (Model)",
+    line=dict(color="#E87040", width=2, dash="dash"),
+    marker=dict(size=6)
+))
+
+# Confidence interval for test period
+fig_eval.add_trace(go.Scatter(
+    x=pd.concat([preds_test["ds"], preds_test["ds"][::-1]]),
+    y=pd.concat([preds_test["yhat_upper"], preds_test["yhat_lower"][::-1]]),
+    fill="toself",
+    fillcolor="rgba(232,112,64,0.15)",
+    line=dict(color="rgba(255,255,255,0)"),
+    name="Confidence Interval"
+))
+
+fig_eval.update_layout(
+    xaxis_title="Date",
+    yaxis_title="Units Sold",
+    hovermode="x unified",
+    height=400,
+    plot_bgcolor="#0e1117",
+    paper_bgcolor="#0e1117",
+    font=dict(color="white")
+)
+
+st.plotly_chart(fig_eval, use_container_width=True)
+
+# Show a table comparing actual vs predicted week by week
+st.subheader("📋 Week by Week Comparison")
+comparison_df = pd.DataFrame({
+    "Week": test_df["ds"].dt.strftime("%Y-%m-%d").values,
+    "Actual Units": test_df["y"].values,
+    "Predicted Units": preds_test["yhat"].round(0).astype(int).values,
+    "Error (units)": (test_df["y"].values - preds_test["yhat"].values).round(0).astype(int),
+    "Error (%)": ((abs(test_df["y"].values - preds_test["yhat"].values) / test_df["y"].values) * 100).round(1)
+})
+st.dataframe(comparison_df, use_container_width=True)
+
 # ── Components Chart ──────────────────────────────────────────
 if show_components:
     st.subheader("🔍 Trend & Seasonality Breakdown")
