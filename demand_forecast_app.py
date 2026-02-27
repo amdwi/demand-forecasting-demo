@@ -125,7 +125,7 @@ with st.expander("🗂️ View Raw Data"):
     st.dataframe(df.rename(columns={"ds": "Date", "y": "Units Sold"}), use_container_width=True)
 
 st.caption("Demo built with Prophet · Plotly · Streamlit — open source & free")
-```
+
 
 
 
