@@ -80,9 +80,6 @@ fig.add_trace(go.Scatter(
     name="Confidence Interval"
 ))
 forecast_start = df["ds"].max().strftime("%Y-%m-%d")
-fig.add_vline(x=forecast_start, line_dash="dot", line_color="gray",
-              annotation_text="Forecast Start", annotation_position="top right")
-fig.update_layout(
     xaxis_title="Date", yaxis_title="Units Sold",
     legend=dict(orientation="h", yanchor="bottom", y=1.02),
     hovermode="x unified", height=450,
