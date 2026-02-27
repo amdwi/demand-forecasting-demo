@@ -42,7 +42,7 @@ def generate_data(product, seasonality):
         + np.linspace(0, trend, periods)
         + np.random.normal(0, noise, periods)
     )
-    return pd.DataFrame({"ds": dates, "y": np.maximum(sales, 0)})
+    return pd.DataFrame({"ds": dates, "y": np.maximum(sales, 0).round(0).astype(int)})
 
 df = generate_data(product, seasonality)
 
